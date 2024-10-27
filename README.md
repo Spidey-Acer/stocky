@@ -349,3 +349,116 @@ composer install
 -   Verify database exists
 -   Check database credentials in .env
 -   Ensure MySQL is running
+
+# 🚀 Major System Upgrades
+
+## 🛠️ Technical Improvements
+
+-   Upgraded to Laravel 8 with PHP 8 support (min PHP 7.3.0)
+-   Node.js dependencies updated to latest versions
+-   Enhanced security measures and code optimization
+-   Added cache clearing functionality
+-   Timezone selection in settings
+-   System update notifications
+
+## 💳 Payment & Financial Features
+
+-   Stripe Payment Gateway integration
+-   Enhanced profit calculation using FIFO and Average Cost methods
+-   Credit card management for clients
+    -   Save cards for future use
+    -   Set default payment methods
+-   Improved due payment handling
+    -   Batch payment processing for customers
+    -   Supplier due payment consolidation
+
+## 📱 Communication & Notifications
+
+-   Multiple SMS Gateway integrations:
+    -   Twilio
+    -   Nexmo (Vonage)
+    -   InfoBip
+-   Custom template system for:
+    -   SMS communications
+    -   Email notifications
+-   Dynamic email & SMS templates
+
+## 🏪 POS Enhancements
+
+-   Barcode scanning capabilities:
+    -   Manual barcode entry
+    -   Auto quantity increase on scan
+    -   Auto-generate barcode feature
+-   Receipt improvements:
+    -   Company logo integration
+    -   Warehouse information
+    -   Customizable footer
+    -   Dynamic paper size options
+    -   Shipping fee display
+-   Default customer & warehouse settings
+
+## 📦 Inventory Management
+
+-   Warranty tracking system:
+    -   IMEI number support
+    -   Serial number tracking
+-   Product enhancements:
+    -   Non-sellable item flagging
+    -   Variant pricing & costing
+    -   Auto-generate barcodes
+-   Stock management:
+    -   Multi-warehouse support
+    -   User warehouse assignment
+    -   Stock alerts
+    -   Direct stock updates
+
+## 📊 Reporting & Analytics
+
+-   New report types:
+    -   Product analytics
+    -   Sales analysis
+    -   Purchase tracking
+    -   User activity
+    -   Stock status
+    -   Customer/Supplier due reports
+-   Enhanced features:
+    -   Date range filtering
+    -   Warehouse-specific filtering
+    -   PDF export capability
+    -   Revenue calculations
+    -   Total amount summaries
+
+## 👥 User Management
+
+-   Warehouse access control
+-   Enhanced permission system
+-   Dashboard access controls
+-   HRM module integration
+
+## 🌍 Internationalization
+
+-   New language support:
+    -   Korean
+    -   Bengali
+    -   Brazilian Portuguese
+    -   Danish
+-   Default language selection
+-   Right-to-left (RTL) support
+-   Dynamic currency symbol positioning
+
+## 📝 Documentation
+
+-   Installation guides
+-   Local development setup
+-   Upgrade procedures
+-   Server requirements
+-   Troubleshooting guides
+
+# 🐛 Bug Fixes & Optimizations
+
+-   PDF generation improvements
+-   Import/Export functionality fixes
+-   Mobile search optimization
+-   Print CSS enhancements
+-   Transaction calculation corrections
+-   Database structure optimizations
