@@ -235,260 +235,117 @@ set PYTHON=C:\Python27\python.exe
 -   Go to "Manage App Execution Aliases"
 -   Disable "App Installer" for Python if it exists
 
-Let me know if you still get the error after trying these steps, and I'll provide additional troubleshooting steps.
+1. Environment Setup:
 
-# Version 1.1 - 07-04-2021
+```bash
+# Install specific XAMPP version
+- Download XAMPP version 7.3.0 (this specific version is required)
+- Install XAMPP
+- Start both Apache and MySQL services from XAMPP Control Panel
 
--   Updated : bug Fixed in backup
--   Added : Support IE
+# Create Virtual Host Configuration
+- Edit C:\Windows\system32\drivers\etc\hosts (as administrator)
+Add: 127.0.0.1 stocky.local
 
-# Version 1.2 - 08-04-2021
+# Configure Apache Virtual Host
+- Edit C:\xampp\apache\conf\extra\httpd-vhosts.conf
+Add:
+<VirtualHost *:80>
+    ServerAdmin webmaster@stocky.local
+    DocumentRoot "C:/xampp/htdocs/stocky"
+    ServerName www.stocky.local
+    ServerAlias stocky.local
+    <Directory "C:/xampp/htdocs/stocky">
+        Options Indexes FollowSymLinks Includes ExecCGI
+        AllowOverride All
+        Require all granted
+    </Directory>
+    ErrorLog "logs/stocky.local-error.log"
+    CustomLog "logs/stocky.local-access.log" common
+</VirtualHost>
+```
 
--   Added : Footer Dynamic
--   Added : Instruction Installation In Localhost
--   Updated : Changing the Database Structure
--   Updated : bug Fixed in dark mode
--   Updated : bug Fixed in Edit Payment
+2. Project Setup:
 
-# Version 1.3 - 10-04-2021
+```bash
+# Copy project files
+- Extract downloaded POS files to: C:/xampp/htdocs/stocky
 
--   Updated : Improve Code
--   Updated : Improve security
+# Install Dependencies
+- Install Composer (https://getcomposer.org/)
+- Open terminal in project directory:
+cd C:/xampp/htdocs/stocky
+composer install
+composer update (if install fails)
 
-# Version 1.4 - 12-04-2021
+# Environment Config
+- Copy .env.example to .env
+- Generate application key:
+php artisan key:generate
+```
 
--   Added : Updated Guide
--   Updated : Fixed dropdown in purchases
--   Updated : Fixed Import Products by csv
+3. Database Setup:
 
-# Version 2.0 - 21-04-2021
+```bash
+- Open phpMyAdmin (http://localhost/phpmyadmin)
+- Create new empty database
+- Update .env file with database credentials:
+DB_HOST=localhost
+DB_PORT=3306
+DB_DATABASE=your_database_name
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
--   Updated : Improve security
--   Added : Integration Payment Gateway ( Stripe)
--   Updated : Upgrade to laravel 8 (Support php 8)
--   Updated : The new minimum PHP version is now 7.3.0.
--   Added : Filter By Date for all reports
+4. Final Steps:
 
-# Version 2.1.0 - 22-04-2021
+```bash
+# Clear caches
+php artisan config:clear
+php artisan cache:clear
 
--   Updated : Improve security
--   Updated : Fix bug Duplicate User & Customer & Product Code
+# Restart Apache
+- Restart Apache in XAMPP Control Panel
+- Access http://stocky.local/setup
+- Follow setup wizard:
+  1. Name application
+  2. Select "Local" environment
+  3. Set App Debug to true
+  4. Enter database credentials
+  5. Test connection
+  6. Complete installation
 
-# Version 2.2.0 - 02-05-2021
+# Default Login:
+Email: admin@example.com
+Password: 123456
+```
 
--   Added : SMS API (Twilio)
--   Added : Footer Dynamic
--   Updated : Fix bug in Password Database
--   Updated : Fix bug in Stock Alert
+Common Issues & Solutions:
 
-# Version 2.3.0 - 18-05-2021
+1. 500 Server Error:
 
--   Added : Default Customer & Warehouse in POS
--   Updated : Fix bug in editing Variants Product
+-   Verify XAMPP version is 7.3.0
+-   Check PHP extensions are enabled
+-   Review Apache error logs
+-   Verify .env configuration
 
-# Version 2.4.0 - 02-06-2021
+2. Blank Setup Page:
 
--   Added : Add Sale Date in invoice
--   Updated : Fix Duplicated product in import
--   Updated : Fix Minor bugs
+-   Confirm Apache and MySQL are running
+-   Verify virtual host configuration
+-   Check Apache error logs
+-   Clear browser cache
 
-# Version 2.5.0 - 08-06-2021
+3. Vendor Autoload Error:
 
--   Updated : Fix POS Receipt Printer
+```bash
+rm -rf vendor
+rm composer.lock
+composer install
+```
 
-# Version 3.0.0 - 25-06-2021
+4. Database Connection Issues:
 
--   Added : Barcode Scanner in POS
--   Updated : Fix bug in Import Product
--   Updated : Fix bug in download file
--   Updated : Updated Iconsmind
-
-# Version 3.1.0 - 28-06-2021
-
--   Updated : Minor bug fixes
-
-# Version 3.2.0 - 30-06-2021
-
--   Updated : Fix bug in download pdf (Support php 8)
--   Added : Clearing cache with a click of a button
--   Updated : Fix bug in Import Product (without create warehouse)
--   Updated : Change currency symbol from the right to the left
--   Added : Video in documentation showing you the steps on how to upgrade stocky
--   Updated : Minor bug fixes
-
-# Version 3.3.0 - 06-07-2021
-
--   Added : Add the ability to enter the BarCode manually
--   Added : Barcode Scanner (All Operations)
--   Updated : Fix bug in barcode printing
--   Added : Paper Size for printing barcode labels
--   Updated : Correct some words in Spanish translation
--   Updated : Fix bug in Editing Variants
--   Updated : Fix bug in generate backup
--   Updated : Improve security
--   Updated : Documentation Updated
--   Updated : Minor bug fixes
-
-# Version 3.3.1 - 06-07-2021
-
--   Fixed : Fix bug in pos
-
-# Version 3.3.2 - 12-07-2021
-
--   Fixed : bug in pos
--   Fixed : Design & Size receipt pos for thermal receipt printer
--   Fixed : Currency symbol Dynamic in input fields
--   Fixed : Bug Duplicate save data when click more than one times
-
-# Version 3.4.0 - 29-07-2021
-
--   Added : Server requirements in Installation
--   Added : Automatically increase quantity in POS when scanning items
--   Added : option to choose unit when create Transaction
--   Added : Paid Amount & due Amount in pos receipt
--   Fixed : Show Items in dashboard with permissions
--   Fixed : if Transaction deleted the stock return to previous status
--   Fixed : Profit Calculation based by (price & cost)
--   Fixed : Report Profit And Loss
--   Fixed : Bug in editing Transaction
--   Fixed : Bug in Units
--   Updated : Improve security
--   Updated : Documentation Updated
-
-# Version 3.5.0 - 02-08-2021
-
--   Added : Cost of goods sold formula implemented to calculate profit
--   Added : received & paying Amount & change
--   Fixed : bug in calculate Due Amount
--   Fixed : migration database
--   Fixed : Minor bug fixes
--   Updated : pos receipt
-
-# Version 3.6.0 - 08-08-2021
-
--   Fixed : Minor bug fixes
--   Updated : Documentation Updated
-
-# Version 3.7.0 - 26-09-2021
-
--   Added : Choose default language from area settings
--   Added : Pos Settings
--   Fixed : bug in twillio SMS
--   Updated : Hide Documentation from sidebar
--   Updated : Improve performance
--   Updated : Documentation Updated
--   Fixed : bug fixes
-
-# Version 3.8.0 - 28-10-2021
-
--   Updated : Report profit
--   Updated : Update stock without purchase product
--   Fixed : Bug fixes
-
-# Version 3.9.0 - 01-01-2022
-
--   Added : Add Korean language
--   Added : Add Paid Amount & Due on pdf
--   Added : Add Note on Detail transaction
--   Fixed : Search box fixed
--   Fixed : Bug fixes
-
-# Version 4.0.0 - 11-04-2022
-
--   Added ability to assign warehouses to users
--   Added Module HRM
--   Added multi reports
--   Added Date Range in all reports
--   Update all the Node.js dependencies to their latest version
--   Documentation Updated
--   Fix issue in search box not working properly on mobile
--   Fix Print CSS
--   Make fields optional for Customers & Providers
--   Fixed npm install
--   Small Bug fixes
-
-# Version 4.0.1
-
--   Added Warranty Management (IMEI & SERIAL NUMBERS)
--   Added Delivery Management
--   Added ability to assign warehouses to users
--   Added Users Report
--   Added Stock Report
--   Added Due Report to Customers
--   Added Due Report to Suppliers
--   Added Export PDF to all reports
--   Small Bug fixes
-
-# Version 4.0.2
-
--   Added : Pay all due from the customer list in one payment
--   Added : option product not for selling
--   Added : Nexmo (Vonage now) SMS Gateway
--   Added : bengali language
--   Added : Notification for new update
--   Added : Select Timezone in settings
--   Added : more setting pages
--   Added : invoice footer
--   Added : Permission to Dashboard
--   Added : shipping fees in pos receipt
--   Updated : Sale return will be according to Sale reference.
--   Updated : Purchase return will be according to Purchase reference.
--   Updated : Renamed all routes api
--   Updated : documentation Updated
--   Fixed : Mail settings issue
--   Fixed : Bug fixed when you make a payment
--   Fixed : only admin or user who has permission "system_setting" he can upgrade the system
--   Fixed : bug fixes
-
-# Version 4.0.3
-
--   Add sum of Amount in reports
--   Add clean-webpack-plugin
--   Some bugs Fixed
-
-# Version 4.0.4
-
--   Pay all sell return due from the customer list in one payment
--   Pay all Supplier due from the Supplier list in one payment
--   Pay all Purchase return due from the Supplier list in one payment
--   Fix bug in Purchase & sale return
--   Add Brazilian Portuguese Language
--   Add Tax Number for Customers & Suppliers
--   Add Total revenue (sales - sales return)
--   Documentation Updated
--   Some bugs Fixed
-
-# Version 4.0.5
-
--   Added : Profit Net using (FIFO METHOD)
--   Added : Profit Net using (Average Cost)
--   Added : Product report
--   Added : Product Sell report
--   Added : Product Purchase report
--   Added : Filter by warehouse in reports & dashboard
--   Added : Enable/Disable Print Invoice automatically
--   Fixed : Arabic language in PDF
--   Fixed : bug in twillio SMS
--   Fixed : print pos receipt
--   Some bugs Fixed
-
-# Version 4.0.6
-
--   Fixed issue in Stripe
--   Showing the credit card saved for the client
--   Choose the default credit card for the client
--   Added Price & cost & code to Variants
--   Added Auto Generate barcode
--   Added New SMS Gateway InfoBip
--   Added Custom Templates for SMS
--   Added Custom Templates for Email
--   Added Danish Language
--   Added Price in barcode printing
--   Added an option to choose if you want make a quotation
-    with items has no stock or has stock
--   Added more Permissions
--   Added logo in receipt POS
--   Added warehouse in receipt POS
--   Fixed bug in assign warehouses to users
--   Fixed bug in Import products
--   Some bugs Fixed
+-   Verify database exists
+-   Check database credentials in .env
+-   Ensure MySQL is running
