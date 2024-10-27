@@ -148,6 +148,95 @@ yarn add sass --dev
 
 I recommend using Yarn for this project as it tends to handle the node-sass and other dependencies better than npm for this particular application. The error logs suggest better compatibility with Yarn.
 
+# Changelog
+
+This error indicates Python is not installed or not properly added to your system's PATH. Let's fix this step by step:
+
+1. **Download Python 2.7**
+   Go to: https://www.python.org/downloads/release/python-2718/
+
+-   Scroll down and download "Windows x86-64 MSI installer" for 64-bit systems
+
+2. **Install Python 2.7**
+   During installation:
+
+-   [x] Check "Add Python to PATH"
+-   [x] Install for all users
+-   Default install location should be `C:\Python27`
+
+3. **Verify Python Path**
+   After installation, open a NEW command prompt and check:
+
+```bash
+# Check Python path
+echo %PATH%
+
+# The path should include:
+# C:\Python27 and C:\Python27\Scripts
+```
+
+4. **Manually Add to Path if Needed**
+   If Python is still not found:
+
+```powershell
+# Open PowerShell as Administrator and run:
+[Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\Python27;C:\Python27\Scripts", "Machine")
+```
+
+5. **Set Python for node-gyp**
+
+```bash
+# Set Python path specifically for node-gyp
+set PYTHON=C:\Python27\python.exe
+set NODE_GYP_FORCE_PYTHON=C:\Python27\python.exe
+
+# Verify the variables are set
+echo %PYTHON%
+echo %NODE_GYP_FORCE_PYTHON%
+```
+
+6. **Clean and Reinstall**
+   After Python is properly set up:
+
+```bash
+# Clean previous installation
+rm -rf node_modules
+yarn cache clean
+
+# Try installation again
+yarn install
+```
+
+If you're still getting the error, try these alternative steps:
+
+1. **Using Windows Python Launcher**
+
+```bash
+# Check if py launcher is installed
+py --version
+
+# If it exists, try using it to install Python 2.7
+py -2.7 -m pip install --upgrade pip
+```
+
+2. **Direct Path Usage**
+
+```bash
+# Try using the full path
+C:\Python27\python.exe --version
+
+# If this works, you can set it directly
+set PYTHON=C:\Python27\python.exe
+```
+
+3. **System Settings Check**
+
+-   Open Windows Settings
+-   Go to "Manage App Execution Aliases"
+-   Disable "App Installer" for Python if it exists
+
+Let me know if you still get the error after trying these steps, and I'll provide additional troubleshooting steps.
+
 # Version 1.1 - 07-04-2021
 
 -   Updated : bug Fixed in backup
