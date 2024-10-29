@@ -1,3 +1,5 @@
+const mix = require("laravel-mix");
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -9,14 +11,19 @@
  |
  */
 
-const mix = require("laravel-mix");
-
 const MomentLocalesPlugin = require("moment-locales-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 mix.js("resources/src/main.js", "public")
     .js("resources/src/login.js", "public")
-    .vue();
+    .vue()
+    .sass(
+        "resources/src/assets/styles/sass/themes/lite-purple.scss",
+        "public/css",
+        {
+            implementation: require("sass"),
+        }
+    );
 
 mix.webpackConfig({
     output: {
@@ -29,6 +36,27 @@ mix.webpackConfig({
             cleanOnceBeforeBuildPatterns: ["./js/*"],
         }),
     ],
+    module: {
+        rules: [
+            {
+                test: /\.scss$/,
+                use: [
+                    "sass-loader",
+                    {
+                        loader: "sass-loader",
+                        options: {
+                            implementation: require("sass"),
+                        },
+                    },
+                ],
+            },
+        ],
+    },
+});
+
+// Disable processing URLs in CSS/Sass files
+mix.options({
+    processCssUrls: false,
 });
 
 // If you're in development, you might want source maps
