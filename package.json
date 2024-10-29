@@ -52,7 +52,6 @@
         "vue-loader": "^15.9.8",
         "vue-localstorage": "^0.6.2",
         "vue-meta": "^2.4.0",
-        "vue-mj-daterangepicker": "^0.1.11",
         "vue-navigation-bar": "^4.1.0",
         "vue-perfect-scrollbar": "^0.2.1",
         "vue-router": "^3.5.3",
@@ -80,6 +79,9 @@
         "webpack-bundle-analyzer": "^4.5.0",
         "webpack-cli": "^4.9.2",
         "webpack-i18n-extractor-plugin": "^2.0.7"
+    },
+    "overrides": {
+        "node-sass": "8.0.0"
     },
     "name": "point-of-sale-and-inventory-management-system",
     "version": "1.0.0",
