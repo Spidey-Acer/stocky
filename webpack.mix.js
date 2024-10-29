@@ -1,5 +1,4 @@
-const mix = require('laravel-mix');
-
+const mix = require("laravel-mix");
 
 /*
  |--------------------------------------------------------------------------
@@ -12,23 +11,51 @@ const mix = require('laravel-mix');
  |
  */
 
-const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const MomentLocalesPlugin = require("moment-locales-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
-
-mix.js('resources/src/main.js', 'public').js('resources/src/login.js', 'public')
-    .vue();
-
-    mix.webpackConfig({
-        output: {
-          
-            filename:'js/[name].min.js',
-            chunkFilename: 'js/bundle/[name].[hash].js',
-          },
-        plugins: [
-            new MomentLocalesPlugin(),
-            new CleanWebpackPlugin({
-                cleanOnceBeforeBuildPatterns: ['./js/*']
-              }),
-        ]
+mix.js("resources/src/main.js", "public")
+    .js("resources/src/login.js", "public")
+    .vue()
+    .sass("resources/sass/app.scss", "public/css", {
+        implementation: require("sass"),
     });
+
+mix.webpackConfig({
+    output: {
+        filename: "js/[name].min.js",
+        chunkFilename: "js/bundle/[name].[hash].js",
+    },
+    plugins: [
+        new MomentLocalesPlugin(),
+        new CleanWebpackPlugin({
+            cleanOnceBeforeBuildPatterns: ["./js/*"],
+        }),
+    ],
+    module: {
+        rules: [
+            {
+                test: /\.scss$/,
+                use: [
+                    "sass-loader",
+                    {
+                        loader: "sass-loader",
+                        options: {
+                            implementation: require("sass"),
+                        },
+                    },
+                ],
+            },
+        ],
+    },
+});
+
+// Disable processing URLs in CSS/Sass files
+mix.options({
+    processCssUrls: false,
+});
+
+// If you're in development, you might want source maps
+if (!mix.inProduction()) {
+    mix.sourceMaps();
+}
