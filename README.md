@@ -1,255 +1,632 @@
-# Version 1.1 - 07-01-2021
+# POS Management and Inventory System Setup Guide
 
--   Updated : bug Fixed in backup
--   Added : Support IE
+## Prerequisites
 
-# Version 1.2 - 08-04-2021
+-   Node.js version 18.x or later
+-   Visual Studio Build Tools 2022 with:
+    -   Desktop development with C++
+    -   Windows 10/11 SDK
+    -   MSVC v143 Build Tools
+    -   C++ CMake tools
+-   Python 2.7 (Make sure to add to PATH during installation)
+-   XAMPP (version 7.3.0 recommended) with:
+    -   PHP >= 7.3.0
+    -   MySQL 5.x or higher
 
--   Added : Footer Dynamic
--   Added : Instruction Installation In Localhost
--   Updated : Changing the Database Structure
--   Updated : bug Fixed in dark mode
--   Updated : bug Fixed in Edit Payment
+## Required PHP Extensions
 
-# Version 1.3 - 10-04-2021
+-   BCMath PHP Extension
+-   Ctype PHP Extension
+-   Fileinfo PHP Extension
+-   GD2 PHP Extension
+-   JSON PHP Extension
+-   Mbstring PHP Extension
+-   OpenSSL PHP Extension
+-   PDO PHP Extension
+-   Tokenizer PHP Extension
+-   XML PHP Extension
 
--   Updated : Improve Code
--   Updated : Improve security
+## Installation Steps
 
-# Version 1.4 - 12-04-2021
+1. **Prepare Environment**
 
--   Added : Updated Guide
--   Updated : Fixed dropdown in purchases
--   Updated : Fixed Import Products by csv
+```bash
+# Install Python 2.7 first, then set environment variable
+set NODE_GYP_FORCE_PYTHON=C:\Python27\python.exe
+set npm_config_msvs_version=2022
+```
 
-# Version 2.0 - 21-04-2024
+2. **Configure XAMPP**
 
--   Updated : Improve security
--   Added : Integration Payment Gateway ( Stripe)
--   Updated : Upgrade to laravel 8 (Support php 8)
--   Updated : The new minimum PHP version is now 7.3.0.
--   Added : Filter By Date for all reports
+-   Place project files in `C:/xampp/htdocs/stocky`
+-   Start Apache and MySQL from XAMPP Control Panel
 
-# Version 2.1.0 - 22-04-2021
+3. **Configure Virtual Host**
 
--   Updated : Improve security
--   Updated : Fix bug Duplicate User & Customer & Product Code
+-   Edit `C:\Windows\System32\drivers\etc\hosts`:
 
-# Version 2.2.0 - 02-05-2021
+```
+127.0.0.1 stocky.local
+```
 
--   Added : SMS API (Twilio)
--   Added : Footer Dynamic
--   Updated : Fix bug in Password Database
--   Updated : Fix bug in Stock Alert
+-   Edit `C:\xampp\apache\conf\extra\httpd-vhosts.conf`:
 
-# Version 2.3.0 - 18-05-2021
+```apache
+<VirtualHost stocky.local:80>
+    ServerAdmin webmaster@stocky.local
+    DocumentRoot "C:/xampp/htdocs/stocky"
+    ServerName www.stocky.local
+    ServerAlias stocky.local
 
--   Added : Default Customer & Warehouse in POS
--   Updated : Fix bug in editing Variants Product
+    <Directory "C:/xampp/htdocs/stocky">
+        Options Indexes FollowSymLinks Includes ExecCGI
+        AllowOverride All
+        Require all granted
+    </Directory>
 
-# Version 2.4.0 - 02-06-2021
+    ErrorLog "logs/stocky.local-error.log"
+    CustomLog "logs/stocky.local-access.log" common
+</VirtualHost>
+```
 
--   Added : Add Sale Date in invoice
--   Updated : Fix Duplicated product in import
--   Updated : Fix Minor bugs
+4. **Install Dependencies**
 
-# Version 2.5.0 - 08-06-2021
+```bash
+# Clean any existing installations
+rm -rf node_modules
+rm -f package-lock.json
+rm -f yarn.lock
 
--   Updated : Fix POS Receipt Printer
+# Install using Yarn (recommended)
+yarn install
 
-# Version 3.0.0 - 25-06-2021
+# If using npm
+npm install
+```
 
--   Added : Barcode Scanner in POS
--   Updated : Fix bug in Import Product
--   Updated : Fix bug in download file
--   Updated : Updated Iconsmind
+5. **Database Setup**
 
-# Version 3.1.0 - 28-06-2021
+-   Create new MySQL database through phpMyAdmin
+-   Set up database credentials in your `.env` file
 
--   Updated : Minor bug fixes
+6. **Access Setup Page**
 
-# Version 3.2.0 - 30-06-2021
+-   Restart Apache
+-   Navigate to `http://stocky.local/setup`
+-   Follow the setup wizard:
+    1. Configure application name and environment
+    2. Enter database credentials
+    3. Complete installation
 
--   Updated : Fix bug in download pdf (Support php 8)
--   Added : Clearing cache with a click of a button
--   Updated : Fix bug in Import Product (without create warehouse)
--   Updated : Change currency symbol from the right to the left
--   Added : Video in documentation showing you the steps on how to upgrade stocky
--   Updated : Minor bug fixes
+## Default Login Credentials
 
-# Version 3.3.0 - 06-07-2021
+```
+Email: admin@example.com
+Password: 123456
+```
 
--   Added : Add the ability to enter the BarCode manually
--   Added : Barcode Scanner (All Operations)
--   Updated : Fix bug in barcode printing
--   Added : Paper Size for printing barcode labels
--   Updated : Correct some words in Spanish translation
--   Updated : Fix bug in Editing Variants
--   Updated : Fix bug in generate backup
--   Updated : Improve security
--   Updated : Documentation Updated
--   Updated : Minor bug fixes
+## Common Issues & Solutions
 
-# Version 3.3.1 - 06-07-2021
+1. **500 Server Error**
 
--   Fixed : Fix bug in pos
+-   Check PHP version compatibility
+-   Verify all required PHP extensions are enabled
+-   Check file permissions
+-   Review error logs in XAMPP
 
-# Version 3.3.2 - 12-07-2021
+2. **Node-sass Issues**
 
--   Fixed : bug in pos
--   Fixed : Design & Size receipt pos for thermal receipt printer
--   Fixed : Currency symbol Dynamic in input fields
--   Fixed : Bug Duplicate save data when click more than one times
+```bash
+# If node-sass fails, try:
+yarn remove node-sass
+yarn add sass --dev
+```
 
-# Version 3.4.0 - 29-07-2021
+3. **Setup Page Not Found**
 
--   Added : Server requirements in Installation
--   Added : Automatically increase quantity in POS when scanning items
--   Added : option to choose unit when create Transaction
--   Added : Paid Amount & due Amount in pos receipt
--   Fixed : Show Items in dashboard with permissions
--   Fixed : if Transaction deleted the stock return to previous status
--   Fixed : Profit Calculation based by (price & cost)
--   Fixed : Report Profit And Loss
--   Fixed : Bug in editing Transaction
--   Fixed : Bug in Units
--   Updated : Improve security
--   Updated : Documentation Updated
+-   Verify virtual host configuration
+-   Check Apache rewrite module is enabled
+-   Ensure all project files are in correct location
 
-# Version 3.5.0 - 02-08-2021
+4. **Database Connection Issues**
 
--   Added : Cost of goods sold formula implemented to calculate profit
--   Added : received & paying Amount & change
--   Fixed : bug in calculate Due Amount
--   Fixed : migration database
--   Fixed : Minor bug fixes
--   Updated : pos receipt
+-   Verify MySQL is running
+-   Check database credentials in `.env` file
+-   Ensure database exists and user has proper permissions
 
-# Version 3.6.0 - 08-08-2021
+## Development Notes
 
--   Fixed : Minor bug fixes
--   Updated : Documentation Updated
+-   Source code structure:
+    -   `/assets` - Contains CSS, JS, Images
+    -   `/core` - Contains Laravel framework files
+    -   `/core/routes/web.php` - URL routes
+    -   `/core/app` - Models
+    -   `/core/app/Http` - Controllers
+    -   `/core/resources/views` - Views/HTML
 
-# Version 3.7.0 - 26-09-2021
+## Recommendation
 
--   Added : Choose default language from area settings
--   Added : Pos Settings
--   Fixed : bug in twillio SMS
--   Updated : Hide Documentation from sidebar
--   Updated : Improve performance
--   Updated : Documentation Updated
--   Fixed : bug fixes
+I recommend using Yarn for this project as it tends to handle the node-sass and other dependencies better than npm for this particular application. The error logs suggest better compatibility with Yarn.
 
-# Version 3.8.0 - 28-10-2021
+# Changelog
 
--   Updated : Report profit
--   Updated : Update stock without purchase product
--   Fixed : Bug fixes
+This error indicates Python is not installed or not properly added to your system's PATH. Let's fix this step by step:
 
-# Version 3.9.0 - 01-01-2022
+1. **Download Python 2.7**
+   Go to: https://www.python.org/downloads/release/python-2718/
 
--   Added : Add Korean language
--   Added : Add Paid Amount & Due on pdf
--   Added : Add Note on Detail transaction
--   Fixed : Search box fixed
--   Fixed : Bug fixes
+-   Scroll down and download "Windows x86-64 MSI installer" for 64-bit systems
 
-# Version 4.0.0 - 11-04-2022
+2. **Install Python 2.7**
+   During installation:
 
--   Added ability to assign warehouses to users
--   Added Module HRM
--   Added multi reports
--   Added Date Range in all reports
--   Update all the Node.js dependencies to their latest version
--   Documentation Updated
--   Fix issue in search box not working properly on mobile
--   Fix Print CSS
--   Make fields optional for Customers & Providers
--   Fixed npm install
--   Small Bug fixes
+-   [x] Check "Add Python to PATH"
+-   [x] Install for all users
+-   Default install location should be `C:\Python27`
 
-# Version 4.0.1
+3. **Verify Python Path**
+   After installation, open a NEW command prompt and check:
 
--   Added Warranty Management (IMEI & SERIAL NUMBERS)
--   Added Delivery Management
--   Added ability to assign warehouses to users
--   Added Users Report
--   Added Stock Report
--   Added Due Report to Customers
--   Added Due Report to Suppliers
--   Added Export PDF to all reports
--   Small Bug fixes
+```bash
+# Check Python path
+echo %PATH%
 
-# Version 4.0.2
+# The path should include:
+# C:\Python27 and C:\Python27\Scripts
+```
 
--   Added : Pay all due from the customer list in one payment
--   Added : option product not for selling
--   Added : Nexmo (Vonage now) SMS Gateway
--   Added : bengali language
--   Added : Notification for new update
--   Added : Select Timezone in settings
--   Added : more setting pages
--   Added : invoice footer
--   Added : Permission to Dashboard
--   Added : shipping fees in pos receipt
--   Updated : Sale return will be according to Sale reference.
--   Updated : Purchase return will be according to Purchase reference.
--   Updated : Renamed all routes api
--   Updated : documentation Updated
--   Fixed : Mail settings issue
--   Fixed : Bug fixed when you make a payment
--   Fixed : only admin or user who has permission "system_setting" he can upgrade the system
--   Fixed : bug fixes
+4. **Manually Add to Path if Needed**
+   If Python is still not found:
 
-# Version 4.0.3
+```powershell
+# Open PowerShell as Administrator and run:
+[Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\Python27;C:\Python27\Scripts", "Machine")
+```
 
--   Add sum of Amount in reports
--   Add clean-webpack-plugin
--   Some bugs Fixed
+5. **Set Python for node-gyp**
 
-# Version 4.0.4
+```bash
+# Set Python path specifically for node-gyp
+set PYTHON=C:\Python27\python.exe
+set NODE_GYP_FORCE_PYTHON=C:\Python27\python.exe
 
--   Pay all sell return due from the customer list in one payment
--   Pay all Supplier due from the Supplier list in one payment
--   Pay all Purchase return due from the Supplier list in one payment
--   Fix bug in Purchase & sale return
--   Add Brazilian Portuguese Language
--   Add Tax Number for Customers & Suppliers
--   Add Total revenue (sales - sales return)
--   Documentation Updated
--   Some bugs Fixed
+# Verify the variables are set
+echo %PYTHON%
+echo %NODE_GYP_FORCE_PYTHON%
+```
 
-# Version 4.0.5
+6. **Clean and Reinstall**
+   After Python is properly set up:
 
--   Added : Profit Net using (FIFO METHOD)
--   Added : Profit Net using (Average Cost)
--   Added : Product report
--   Added : Product Sell report
--   Added : Product Purchase report
--   Added : Filter by warehouse in reports & dashboard
--   Added : Enable/Disable Print Invoice automatically
--   Fixed : Arabic language in PDF
--   Fixed : bug in twillio SMS
--   Fixed : print pos receipt
--   Some bugs Fixed
+```bash
+# Clean previous installation
+rm -rf node_modules
+yarn cache clean
 
-# Version 4.0.6
+# Try installation again
+yarn install
+```
 
--   Fixed issue in Stripe
--   Showing the credit card saved for the client
--   Choose the default credit card for the client
--   Added Price & cost & code to Variants
--   Added Auto Generate barcode
--   Added New SMS Gateway InfoBip
--   Added Custom Templates for SMS
--   Added Custom Templates for Email
--   Added Danish Language
--   Added Price in barcode printing
--   Added an option to choose if you want make a quotation
-    with items has no stock or has stock
--   Added more Permissions
--   Added logo in receipt POS
--   Added warehouse in receipt POS
--   Fixed bug in assign warehouses to users
--   Fixed bug in Import products
--   Some bugs Fixed
+If you're still getting the error, try these alternative steps:
+
+1. **Using Windows Python Launcher**
+
+```bash
+# Check if py launcher is installed
+py --version
+
+# If it exists, try using it to install Python 2.7
+py -2.7 -m pip install --upgrade pip
+```
+
+2. **Direct Path Usage**
+
+```bash
+# Try using the full path
+C:\Python27\python.exe --version
+
+# If this works, you can set it directly
+set PYTHON=C:\Python27\python.exe
+```
+
+3. **System Settings Check**
+
+-   Open Windows Settings
+-   Go to "Manage App Execution Aliases"
+-   Disable "App Installer" for Python if it exists
+
+1. Environment Setup:
+
+```bash
+# Install specific XAMPP version
+- Download XAMPP version 7.3.0 (this specific version is required)
+- Install XAMPP
+- Start both Apache and MySQL services from XAMPP Control Panel
+
+# Create Virtual Host Configuration
+- Edit C:\Windows\system32\drivers\etc\hosts (as administrator)
+Add: 127.0.0.1 stocky.local
+
+# Configure Apache Virtual Host
+- Edit C:\xampp\apache\conf\extra\httpd-vhosts.conf
+Add:
+<VirtualHost *:80>
+    ServerAdmin webmaster@stocky.local
+    DocumentRoot "C:/xampp/htdocs/stocky"
+    ServerName www.stocky.local
+    ServerAlias stocky.local
+    <Directory "C:/xampp/htdocs/stocky">
+        Options Indexes FollowSymLinks Includes ExecCGI
+        AllowOverride All
+        Require all granted
+    </Directory>
+    ErrorLog "logs/stocky.local-error.log"
+    CustomLog "logs/stocky.local-access.log" common
+</VirtualHost>
+```
+
+2. Project Setup:
+
+```bash
+# Copy project files
+- Extract downloaded POS files to: C:/xampp/htdocs/stocky
+
+# Install Dependencies
+- Install Composer (https://getcomposer.org/)
+- Open terminal in project directory:
+cd C:/xampp/htdocs/stocky
+composer install
+composer update (if install fails)
+
+# Environment Config
+- Copy .env.example to .env
+- Generate application key:
+php artisan key:generate
+```
+
+3. Database Setup:
+
+```bash
+- Open phpMyAdmin (http://localhost/phpmyadmin)
+- Create new empty database
+- Update .env file with database credentials:
+DB_HOST=localhost
+DB_PORT=3306
+DB_DATABASE=your_database_name
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+4. Final Steps:
+
+```bash
+# Clear caches
+php artisan config:clear
+php artisan cache:clear
+
+# Restart Apache
+- Restart Apache in XAMPP Control Panel
+- Access http://stocky.local/setup
+- Follow setup wizard:
+  1. Name application
+  2. Select "Local" environment
+  3. Set App Debug to true
+  4. Enter database credentials
+  5. Test connection
+  6. Complete installation
+
+# Default Login:
+Email: admin@example.com
+Password: 123456
+```
+
+Common Issues & Solutions:
+
+1. 500 Server Error:
+
+-   Verify XAMPP version is 7.3.0
+-   Check PHP extensions are enabled
+-   Review Apache error logs
+-   Verify .env configuration
+
+2. Blank Setup Page:
+
+-   Confirm Apache and MySQL are running
+-   Verify virtual host configuration
+-   Check Apache error logs
+-   Clear browser cache
+
+3. Vendor Autoload Error:
+
+```bash
+rm -rf vendor
+rm composer.lock
+composer install
+```
+
+4. Database Connection Issues:
+
+-   Verify database exists
+-   Check database credentials in .env
+-   Ensure MySQL is running
+
+# 🚀 Major System Upgrades
+
+## 🛠️ Technical Improvements
+
+-   Upgraded to Laravel 8 with PHP 8 support (min PHP 7.3.0)
+-   Node.js dependencies updated to latest versions
+-   Enhanced security measures and code optimization
+-   Added cache clearing functionality
+-   Timezone selection in settings
+-   System update notifications
+
+## 💳 Payment & Financial Features
+
+-   Stripe Payment Gateway integration
+-   Enhanced profit calculation using FIFO and Average Cost methods
+-   Credit card management for clients
+    -   Save cards for future use
+    -   Set default payment methods
+-   Improved due payment handling
+    -   Batch payment processing for customers
+    -   Supplier due payment consolidation
+
+## 📱 Communication & Notifications
+
+-   Multiple SMS Gateway integrations:
+    -   Twilio
+    -   Nexmo (Vonage)
+    -   InfoBip
+-   Custom template system for:
+    -   SMS communications
+    -   Email notifications
+-   Dynamic email & SMS templates
+
+## 🏪 POS Enhancements
+
+-   Barcode scanning capabilities:
+    -   Manual barcode entry
+    -   Auto quantity increase on scan
+    -   Auto-generate barcode feature
+-   Receipt improvements:
+    -   Company logo integration
+    -   Warehouse information
+    -   Customizable footer
+    -   Dynamic paper size options
+    -   Shipping fee display
+-   Default customer & warehouse settings
+
+## 📦 Inventory Management
+
+-   Warranty tracking system:
+    -   IMEI number support
+    -   Serial number tracking
+-   Product enhancements:
+    -   Non-sellable item flagging
+    -   Variant pricing & costing
+    -   Auto-generate barcodes
+-   Stock management:
+    -   Multi-warehouse support
+    -   User warehouse assignment
+    -   Stock alerts
+    -   Direct stock updates
+
+## 📊 Reporting & Analytics
+
+-   New report types:
+    -   Product analytics
+    -   Sales analysis
+    -   Purchase tracking
+    -   User activity
+    -   Stock status
+    -   Customer/Supplier due reports
+-   Enhanced features:
+    -   Date range filtering
+    -   Warehouse-specific filtering
+    -   PDF export capability
+    -   Revenue calculations
+    -   Total amount summaries
+
+## 👥 User Management
+
+-   Warehouse access control
+-   Enhanced permission system
+-   Dashboard access controls
+-   HRM module integration
+
+## 🌍 Internationalization
+
+-   New language support:
+    -   Korean
+    -   Bengali
+    -   Brazilian Portuguese
+    -   Danish
+-   Default language selection
+-   Right-to-left (RTL) support
+-   Dynamic currency symbol positioning
+
+## 📝 Documentation
+
+-   Installation guides
+-   Local development setup
+-   Upgrade procedures
+-   Server requirements
+-   Troubleshooting guides
+
+# 🐛 Bug Fixes & Optimizations
+
+-   PDF generation improvements
+-   Import/Export functionality fixes
+-   Mobile search optimization
+-   Print CSS enhancements
+-   Transaction calculation corrections
+-   Database structure optimizations
+
+# XAMPP Laravel Project Setup and Troubleshooting Guide
+
+## Initial Issues Encountered
+
+1. phpMyAdmin Configuration Error
+    - Error: `#1142 - INSERT command denied to user 'pma@localhost'`
+    - 500 Server Error on localhost
+2. MySQL Connection Issues
+    - "Could not find driver" error
+    - Access denied for root user
+3. Laravel Session Directory Issues
+    - Failed to write to sessions directory
+
+## Step-by-Step Resolution
+
+### 1. MySQL PDO Driver Setup
+
+```bash
+# Enable in php.ini (C:\xampp\php\php.ini)
+extension=pdo_mysql
+extension=mysqli
+```
+
+### 2. Directory Structure and Permissions
+
+```bash
+cd C:\xampp\htdocs\stocky
+mkdir -p storage\framework\sessions
+mkdir -p storage\framework\views
+mkdir -p storage\framework\cache
+mkdir -p bootstrap\cache
+
+# Set permissions
+chmod -R 775 storage
+chmod -R 775 bootstrap/cache
+```
+
+### 3. MySQL Root User Configuration
+
+```sql
+-- Stop MySQL in XAMPP
+-- Start in safe mode
+mysqld --skip-grant-tables --skip-networking
+
+-- In new command prompt
+mysql -u root
+
+-- Reset root password
+FLUSH PRIVILEGES;
+ALTER USER 'root'@'localhost' IDENTIFIED BY '';
+FLUSH PRIVILEGES;
+```
+
+### 4. Laravel Environment Configuration
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=stocky
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+### 5. phpMyAdmin Setup
+
+```sql
+CREATE USER 'pma'@'localhost' IDENTIFIED BY 'pmapass';
+GRANT ALL PRIVILEGES ON phpmyadmin.* TO 'pma'@'localhost';
+GRANT ALL PRIVILEGES ON *.* TO 'pma'@'localhost' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+```
+
+### 6. Laravel Cache and Configuration
+
+```bash
+php artisan config:clear
+php artisan cache:clear
+php artisan view:clear
+php artisan key:generate
+```
+
+## Project Structure
+
+```
+C:/xampp/htdocs/stocky/
+├── storage/
+│   └── framework/
+│       ├── sessions/
+│       ├── views/
+│       └── cache/
+├── bootstrap/
+│   └── cache/
+└── .env
+```
+
+## Common Issues and Solutions
+
+### 1. MySQL Connection Issues
+
+-   Verify MySQL is running in XAMPP Control Panel
+-   Check user permissions in MySQL
+-   Verify PDO drivers are enabled
+-   Clear Laravel configuration cache
+
+### 2. 500 Server Error
+
+-   Check Laravel log files in storage/logs
+-   Verify directory permissions
+-   Enable error reporting in php.ini
+-   Clear Laravel caches
+
+### 3. phpMyAdmin Access
+
+-   Configure proper user permissions
+-   Create required databases
+-   Set up correct configuration in config.inc.php
+
+## Important Configuration Files
+
+### 1. php.ini Location
+
+```
+C:\xampp\php\php.ini
+```
+
+### 2. MySQL Configuration
+
+```
+C:\xampp\mysql\bin\my.ini
+```
+
+### 3. phpMyAdmin Configuration
+
+```
+C:\xampp\phpMyAdmin\config.inc.php
+```
+
+## Best Practices
+
+1. Always check XAMPP Control Panel for service status
+2. Keep regular backups of the database
+3. Monitor Laravel log files for errors
+4. Maintain proper file permissions
+5. Keep configuration files backed up
+
+## Post-Setup Verification
+
+1. Verify MySQL connection: `php artisan migrate`
+2. Check phpMyAdmin access
+3. Verify Laravel routes are working
+4. Check storage directory permissions
+5. Verify session handling
+
+## Additional Resources
+
+-   XAMPP Documentation: https://www.apachefriends.org/docs/
+-   Laravel Documentation: https://laravel.com/docs
+-   MySQL Documentation: https://dev.mysql.com/doc/
+
+## Maintenance Tips
+
+1. Regularly clear Laravel caches
+2. Monitor log files
+3. Keep backups of configurations
+4. Update PHP extensions as needed
+5. Monitor database performance

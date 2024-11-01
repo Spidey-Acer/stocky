@@ -1,34 +1,38 @@
-const mix = require('laravel-mix');
+const mix = require("laravel-mix");
+const MomentLocalesPlugin = require("moment-locales-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
+mix.js("resources/src/main.js", "public")
+    .js("resources/src/login.js", "public")
+    .vue()
+    .sass(
+        "resources/src/assets/styles/sass/themes/lite-purple.scss",
+        "public/css",
+        {
+            implementation: require("sass"),
+            sassOptions: {
+                quietDeps: true, // This will suppress dependency warnings
+            },
+        }
+    );
 
-/*
- |--------------------------------------------------------------------------
- | Mix Asset Management
- |--------------------------------------------------------------------------
- |
- | Mix provides a clean, fluent API for defining some Webpack build steps
- | for your Laravel application. By default, we are compiling the Sass
- | file for the application as well as bundling up all the JS files.
- |
- */
+mix.webpackConfig({
+    output: {
+        filename: "js/[name].min.js",
+        chunkFilename: "js/bundle/[name].[hash].js",
+    },
+    plugins: [
+        new MomentLocalesPlugin(),
+        new CleanWebpackPlugin({
+            cleanOnceBeforeBuildPatterns: ["./js/*"],
+        }),
+    ],
+});
 
-const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+mix.options({
+    processCssUrls: false,
+});
 
-
-mix.js('resources/src/main.js', 'public').js('resources/src/login.js', 'public')
-    .vue();
-
-    mix.webpackConfig({
-        output: {
-          
-            filename:'js/[name].min.js',
-            chunkFilename: 'js/bundle/[name].[hash].js',
-          },
-        plugins: [
-            new MomentLocalesPlugin(),
-            new CleanWebpackPlugin({
-                cleanOnceBeforeBuildPatterns: ['./js/*']
-              }),
-        ]
-    });
+if (!mix.inProduction()) {
+    mix.sourceMaps();
+}
